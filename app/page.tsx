@@ -8,6 +8,7 @@ import { ProductTable } from '@/components/products/product-table';
 import { ProductCard } from '@/components/products/product-card';
 import { ProductForm } from '@/components/products/product-form';
 import { DeleteDialog } from '@/components/products/delete-dialog';
+import { ProductDetailsDialog } from '@/components/products/product-details-dialog';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,6 +34,7 @@ type SortField = 'name' | 'category' | 'price' | 'stock' | 'status';
 type SortOrder = 'asc' | 'desc';
 
 export default function ProductsPage() {
+  // View mode state
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
   // Pagination state
@@ -51,14 +53,19 @@ export default function ProductsPage() {
   // Modal states
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [viewProduct, setViewProduct] = useState<Product | null>(null);
 
+  // Fetch all products
   const { data: products = [], isLoading, error } = useGetAllProducts(1, 100);
 
+  // Mutations
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct();
   const deleteMutation = useDeleteProduct();
 
+  // Client-side filtering and sorting
   const filteredAndSortedProducts = useMemo(() => {
     const filtered = products.filter((product) => {
       const matchesSearch =
@@ -92,7 +99,7 @@ export default function ProductsPage() {
           compareValue = a.stock - b.stock;
           break;
         case 'status':
-          compareValue = (a.status === b.status ? 0 : a.status ? -1 : 1);
+          compareValue = a.status === b.status ? 0 : a.status ? -1 : 1;
           break;
       }
 
@@ -138,7 +145,7 @@ export default function ProductsPage() {
     return items;
   };
 
-  // Filter handlers - reset to page 1 when filters change
+  // Filter handlers
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
     setCurrentPage(1);
@@ -164,14 +171,12 @@ export default function ProductsPage() {
   // Sort handler
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      // Toggle sort order if clicking the same field
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
-      // Set new field and default to ascending
       setSortField(field);
       setSortOrder('asc');
     }
-    setCurrentPage(1); // Reset to first page when sorting
+    setCurrentPage(1);
   };
 
   // CRUD handlers
@@ -188,6 +193,11 @@ export default function ProductsPage() {
   const handleDeleteClick = (product: Product) => {
     setSelectedProduct(product);
     setIsDeleteOpen(true);
+  };
+
+  const handleViewClick = (product: Product) => {
+    setViewProduct(product);
+    setIsViewOpen(true);
   };
 
   const handleFormSubmit = async (data: ProductFormValues) => {
@@ -234,7 +244,7 @@ export default function ProductsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {/* View Toggle - Desktop Only */}
+          {/* View Toggle */}
           <div className="hidden items-center gap-1 rounded-lg border p-1 md:flex">
             <Button
               variant={viewMode === 'table' ? 'secondary' : 'ghost'}
@@ -308,6 +318,7 @@ export default function ProductsPage() {
               products={currentProducts}
               onEdit={handleEditClick}
               onDelete={handleDeleteClick}
+              onView={handleViewClick}
               onSort={handleSort}
               sortField={sortField}
               sortOrder={sortOrder}
@@ -332,6 +343,7 @@ export default function ProductsPage() {
                     product={product}
                     onEdit={handleEditClick}
                     onDelete={handleDeleteClick}
+                    onView={handleViewClick}
                   />
                 ))
               )}
@@ -412,6 +424,7 @@ export default function ProductsPage() {
         </>
       )}
 
+      {/* Product Form Modal */}
       <ProductForm
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
@@ -420,12 +433,22 @@ export default function ProductsPage() {
         isLoading={createMutation.isPending || updateMutation.isPending}
       />
 
+      {/* Delete Confirmation Dialog */}
       <DeleteDialog
         open={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
         product={selectedProduct}
         onConfirm={handleDeleteConfirm}
         isLoading={deleteMutation.isPending}
+      />
+
+      {/* View Details Dialog */}
+      <ProductDetailsDialog
+        open={isViewOpen}
+        onOpenChange={setIsViewOpen}
+        product={viewProduct}
+        onEdit={handleEditClick}
+        onDelete={handleDeleteClick}
       />
     </DashboardLayout>
   );

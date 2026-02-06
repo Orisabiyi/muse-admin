@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { MoreHorizontal, Edit, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, ArrowUpDown, ArrowUp, ArrowDown, Eye } from 'lucide-react';
 import { Product } from '@/types/product';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,7 @@ interface ProductTableProps {
   products: Product[];
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
+  onView: (product: Product) => void;
   onSort: (field: SortField) => void;
   sortField: SortField;
   sortOrder: SortOrder;
@@ -72,6 +73,7 @@ export function ProductTable({
   products,
   onEdit,
   onDelete,
+  onView,
   onSort,
   sortField,
   sortOrder,
@@ -190,6 +192,10 @@ export function ProductTable({
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => onView(product)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => onEdit(product)}>
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
