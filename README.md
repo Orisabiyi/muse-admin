@@ -1,6 +1,6 @@
 # 🎨 Muse Admin - Product Management Dashboard
 
-A modern, responsive product management dashboard built with Next.js, TypeScript, and shadcn/ui. Features a complete CRUD interface with advanced filtering, sorting, and real-time search capabilities.
+A modern, responsive product management dashboard built with Next.js 14, TypeScript, and shadcn/ui. Features a complete CRUD interface with advanced filtering, sorting, and real-time search capabilities.
 
 ![Muse Admin Dashboard](./public/screenshots/dashboard.png)
 
@@ -78,12 +78,12 @@ A modern, responsive product management dashboard built with Next.js, TypeScript
 ### Prerequisites
 
 - Node.js 18.x or higher
-- npm or yarn package manager
+- pnpm, npm or yarn package manager
 
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/muse-admin.git
+git clone https://github.com/Orisabiyi/muse-admin.git
 cd muse-admin
 ```
 
@@ -91,11 +91,73 @@ cd muse-admin
 
 ```bash
 pnpm install
-or
+# or
 npm install
+# or
+yarn install
 ```
 
-### Step 3: Environment Variables
+### Step 3: Set Up Mock API
+
+This project uses mockapi.io for the backend. Follow these steps to create your own instance:
+
+#### Create a mockapi.io Account
+
+1. Go to [mockapi.io](https://mockapi.io)
+2. Sign up for a free account
+3. Create a new project
+
+#### Create Products Resource
+
+1. Click "New Resource"
+2. Name it: `products`
+3. Add the following fields:
+
+| Field       | Type    | Configuration                            |
+| ----------- | ------- | ---------------------------------------- |
+| name        | String  | Faker: `{{commerce.productName}}`        |
+| description | Text    | Faker: `{{commerce.productDescription}}` |
+| price       | String  | Faker: `{{commerce.price}}`              |
+| category    | String  | Default: `{{commerce.productAdjective}}` |
+| stock       | Number  |                                          |
+| image       | String  | Faker: `{{image.urlPicsumPhotos}}`       |
+| status      | Boolean | Faker: `{{datatype.boolean}}`            |
+
+#### Generate Initial Data
+
+1. Click "Generate Data"
+2. Generate 50-100 products
+
+#### Update Categories to Match App
+
+Run this script in your browser console while on mockapi.io:
+
+```javascript
+const API_URL = "https://YOUR-PROJECT-ID.mockapi.io/api/v1/products";
+const CATEGORIES = ["Electronics", "Clothing", "Books", "Home", "Sports"];
+
+(async () => {
+  const res = await fetch(`${API_URL}?limit=100`);
+  const products = await res.json();
+
+  for (const product of products) {
+    const randomCategory =
+      CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+
+    await fetch(`${API_URL}/${product.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...product, category: randomCategory }),
+    });
+
+    console.log(`✓ Updated: ${product.name} → ${randomCategory}`);
+  }
+
+  console.log("✅ All products updated!");
+})();
+```
+
+### Step 4: Environment Variables
 
 Create a `.env.local` file in the root directory:
 
@@ -103,19 +165,19 @@ Create a `.env.local` file in the root directory:
 NEXT_PUBLIC_API_URL=https://YOUR-PROJECT-ID.mockapi.io/api/v1
 ```
 
-Replace `YOUR-PROJECT-ID` with your actual mockapi.io project ID.
+Replace `YOUR-PROJECT-ID` with your actual mockapi.io project ID from the dashboard.
 
-### Step 4: Run Development Server
+### Step 5: Run Development Server
 
 ```bash
 pnpm run dev
-or
-npm run dev
+# or
+npm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Step 5: Build for Production
+### Step 6: Build for Production
 
 ```bash
 pnpm run build
@@ -162,6 +224,7 @@ muse-admin/
 │   └── screenshots/            # Application screenshots
 │
 ├── .env.local                  # Environment variables (gitignored)
+├── .env.example                # Example environment variables
 ├── next.config.js              # Next.js configuration
 ├── tailwind.config.ts          # Tailwind configuration
 ├── tsconfig.json               # TypeScript configuration
@@ -174,7 +237,7 @@ muse-admin/
 
 #### 1. **Next.js 14 with App Router**
 
-**Why:** Chose Next.js App Router for its cutting-edge features including React Server Components, improved routing system, and built-in performance optimizations.
+**Why:** Chose Next.js 14's App Router for its cutting-edge features including React Server Components, improved routing system, and built-in performance optimizations.
 
 **Benefits:**
 
@@ -271,8 +334,6 @@ const filteredAndSortedProducts = useMemo(() => {
 - Works efficiently up to ~1,000 products
 - Initial load fetches all data (larger payload)
 - Not suitable for massive datasets
-
-**Future Enhancement:** For production apps with 10,000+ products, migrate to server-side pagination with query parameters like `?page=1&limit=10&sort=price&order=asc&category=Electronics`.
 
 ---
 
@@ -534,10 +595,10 @@ Next.js automatically splits code per route, reducing initial bundle size.
 ## 📦 Available Scripts
 
 ```bash
-npm run dev          # Start development server on localhost:3000
-npm run build        # Build optimized production bundle
-npm start            # Start production server
-npm run lint         # Run ESLint for code quality checks
+pnpm run dev          # Start development server on localhost:3000
+pnpm run build        # Build optimized production bundle
+pnpm start            # Start production server
+pnpm run lint         # Run ESLint for code quality checks
 ```
 
 ## 🔮 Future Enhancements
@@ -581,14 +642,6 @@ Contributions are welcome! Please follow these steps:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
-
-**Your Name**
-
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
-- Portfolio: [yourportfolio.com](https://yourportfolio.com)
-
 ## 🙏 Acknowledgments
 
 - [Next.js](https://nextjs.org/) - The React framework for production
@@ -600,5 +653,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Lucide](https://lucide.dev/) - Beautiful & consistent icon set
 
 ---
-
-**Built with ❤️ using Next.js and TypeScript**
