@@ -29,6 +29,9 @@ import {
 import { Product } from '@/types/product';
 import { ProductFormValues } from '@/lib/validations';
 
+type SortField = 'name' | 'category' | 'price' | 'stock' | 'status';
+type SortOrder = 'asc' | 'desc';
+
 export default function ProductsPage() {
   // View mode state
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
@@ -41,6 +44,10 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
+
+  // Sort states
+  const [sortField, setSortField] = useState<SortField>('name');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
   // Modal states
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -55,32 +62,58 @@ export default function ProductsPage() {
   const updateMutation = useUpdateProduct();
   const deleteMutation = useDeleteProduct();
 
-  // Client-side filtering
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      // Search filter
+  // Client-side filtering and sorting
+  // Client-side filtering and sorting
+  const filteredAndSortedProducts = useMemo(() => {
+    // First, filter products
+    const filtered = products.filter((product) => {  // ✅ Changed from 'let' to 'const'
       const matchesSearch =
         searchQuery === '' ||
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-      // Category filter
       const matchesCategory =
         selectedCategory === 'all' || product.category === selectedCategory;
 
-      // Status filter
       const matchesStatus =
         selectedStatus === 'all' || product.status.toString() === selectedStatus;
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [products, searchQuery, selectedCategory, selectedStatus]);
+
+    // Then, sort products
+    filtered.sort((a, b) => {
+      let compareValue = 0;
+
+      switch (sortField) {
+        case 'name':
+          compareValue = a.name.localeCompare(b.name);
+          break;
+        case 'category':
+          compareValue = a.category.localeCompare(b.category);
+          break;
+        case 'price':
+          compareValue = parseFloat(a.price) - parseFloat(b.price);
+          break;
+        case 'stock':
+          compareValue = a.stock - b.stock;
+          break;
+        case 'status':
+          compareValue = (a.status === b.status ? 0 : a.status ? -1 : 1);
+          break;
+      }
+
+      return sortOrder === 'asc' ? compareValue : -compareValue;
+    });
+
+    return filtered;
+  }, [products, searchQuery, selectedCategory, selectedStatus, sortField, sortOrder]);
 
   // Pagination calculations
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+  const currentProducts = filteredAndSortedProducts.slice(startIndex, endIndex);
 
   // Generate pagination items
   const getPaginationItems = () => {
@@ -135,6 +168,19 @@ export default function ProductsPage() {
     setCurrentPage(1);
   };
 
+  // Sort handler
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      // Toggle sort order if clicking the same field
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new field and default to ascending
+      setSortField(field);
+      setSortOrder('asc');
+    }
+    setCurrentPage(1); // Reset to first page when sorting
+  };
+
   // CRUD handlers
   const handleCreateClick = () => {
     setSelectedProduct(null);
@@ -154,13 +200,11 @@ export default function ProductsPage() {
   const handleFormSubmit = async (data: ProductFormValues) => {
     try {
       if (selectedProduct) {
-        // Update existing product
         await updateMutation.mutateAsync({
           id: selectedProduct.id,
           data: data,
         });
       } else {
-        // Create new product
         await createMutation.mutateAsync(data);
       }
       setIsFormOpen(false);
@@ -177,7 +221,6 @@ export default function ProductsPage() {
         setIsDeleteOpen(false);
         setSelectedProduct(null);
 
-        // If we deleted the last item on the page, go back one page
         if (currentProducts.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
         }
@@ -240,7 +283,7 @@ export default function ProductsPage() {
 
       {/* Loading State */}
       {isLoading && (
-        <Card className='mt-10 rounded-none'>
+        <Card className="mt-10 rounded-none">
           <CardContent className="pt-6">
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
@@ -272,6 +315,9 @@ export default function ProductsPage() {
               products={currentProducts}
               onEdit={handleEditClick}
               onDelete={handleDeleteClick}
+              onSort={handleSort}
+              sortField={sortField}
+              sortOrder={sortOrder}
             />
           )}
 
@@ -304,8 +350,8 @@ export default function ProductsPage() {
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row mt-5 w-full">
               <div className="text-sm text-muted-foreground w-full">
                 Page {currentPage} of {totalPages} • Showing {startIndex + 1}-
-                {Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length}{' '}
-                products
+                {Math.min(endIndex, filteredAndSortedProducts.length)} of{' '}
+                {filteredAndSortedProducts.length} products
               </div>
               <Pagination>
                 <PaginationContent>
@@ -353,7 +399,7 @@ export default function ProductsPage() {
             </div>
           )}
 
-          {/* Empty State - No products at all */}
+          {/* Empty State */}
           {products.length === 0 && (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-16">
