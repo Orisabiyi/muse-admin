@@ -190,7 +190,7 @@ export default function ProductsPage() {
   return (
     <DashboardLayout>
       {/* Page Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-5">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Products</h1>
           <p className="text-muted-foreground">
@@ -240,7 +240,7 @@ export default function ProductsPage() {
 
       {/* Loading State */}
       {isLoading && (
-        <Card>
+        <Card className='mt-10'>
           <CardContent className="pt-6">
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
@@ -253,7 +253,7 @@ export default function ProductsPage() {
 
       {/* Error State */}
       {error && (
-        <Card className="border-destructive">
+        <Card className="border-destructive mt-10">
           <CardContent className="pt-6">
             <div className="text-center text-destructive">
               <p className="font-semibold">Error loading products</p>

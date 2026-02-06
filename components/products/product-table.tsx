@@ -31,7 +31,7 @@ interface ProductTableProps {
 
 export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) {
   return (
-    <Card>
+    <Card className='mt-5 rounded-none'>
       <CardHeader>
         <CardTitle>Products</CardTitle>
       </CardHeader>

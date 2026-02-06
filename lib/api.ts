@@ -3,7 +3,7 @@ import { Product } from "@/types/product";
 import axios from "axios";
 import { ProductFormValues } from "./validations";
 
-const baseUrl = process.env.MUSE_BASE_URL
+const baseUrl = process.env.NEXT_PUBLIC_MUSE_BASE_URL
 
 
 
