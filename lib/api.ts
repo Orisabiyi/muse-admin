@@ -1,8 +1,11 @@
 import { Params } from "@/types/api-types";
 import { Product } from "@/types/product";
 import axios from "axios";
+import { ProductFormValues } from "./validations";
 
 const baseUrl = process.env.MUSE_BASE_URL
+
+
 
 const api = axios.create({
   baseURL: baseUrl,
@@ -27,14 +30,24 @@ export const productApi = {
     return data
   },
 
-  createNewProduct: async (product: Omit<Product, 'id'>) => {
-    const { data } = await api.post<Product>('/products', product)
+  createNewProduct: async (product: ProductFormValues) => {
+    const payload = {
+      ...product,
+      price: product.price.toString(),
+    };
+
+    const { data } = await api.post<Product>('/products', payload)
 
     return data
   },
 
-  updateExistingProduct: async (id: string, product: Omit<Product, 'id'>) => {
-    const { data } = await api.put<Product>(`/products/${id}`, product)
+  updateExistingProduct: async (id: string, product: ProductFormValues) => {
+    const payload = {
+      ...product,
+      price: product.price.toString(),
+    };
+
+    const { data } = await api.put<Product>(`/products/${id}`, payload)
 
     return data
   },
