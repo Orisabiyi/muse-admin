@@ -266,14 +266,6 @@ export default function ProductsPage() {
       {/* Products Display */}
       {!isLoading && !error && (
         <>
-          {/* Results Count */}
-          <div className="text-sm text-muted-foreground">
-            {filteredProducts.length === 0
-              ? 'No products found'
-              : `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'
-              }`}
-          </div>
-
           {/* Table View */}
           {viewMode === 'table' && (
             <ProductTable
