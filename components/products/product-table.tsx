@@ -77,7 +77,7 @@ export function ProductTable({
   sortOrder,
 }: ProductTableProps) {
   return (
-    <Card>
+    <Card className='mt-5 rounded-none'>
       <CardHeader>
         <CardTitle>Products</CardTitle>
       </CardHeader>
@@ -141,7 +141,7 @@ export function ProductTable({
                 products.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell>
-                      <div className="relative h-16 w-16 overflow-hidden rounded-md">
+                      <div className="relative h-16 w-16 overflow-hidden">
                         <Image
                           src={product.image}
                           alt={product.name}
