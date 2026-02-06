@@ -60,7 +60,7 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                 products.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell>
-                      <div className="relative h-16 w-16 overflow-hidden rounded-md">
+                      <div className="relative h-16 w-16 overflow-hidden">
                         <Image
                           src={product.image}
                           alt={product.name}

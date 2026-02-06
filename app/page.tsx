@@ -240,7 +240,7 @@ export default function ProductsPage() {
 
       {/* Loading State */}
       {isLoading && (
-        <Card className='mt-10'>
+        <Card className='mt-10 rounded-none'>
           <CardContent className="pt-6">
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
