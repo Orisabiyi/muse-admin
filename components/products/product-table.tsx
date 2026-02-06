@@ -35,7 +35,6 @@ interface ProductTableProps {
   sortOrder: SortOrder;
 }
 
-// ✅ Moved outside - defined before ProductTable component
 interface SortableHeaderProps {
   field: SortField;
   children: React.ReactNode;

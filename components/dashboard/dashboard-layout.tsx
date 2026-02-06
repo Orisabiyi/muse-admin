@@ -36,7 +36,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <div className="flex flex-1 flex-col overflow-hidden">
-          {/* Header */}
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <SidebarTrigger />
             <div className="flex-1">
@@ -45,7 +44,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <UserNav />
           </header>
 
-          {/* Main Content */}
           <main className="flex-1 p-4 md:p-6 lg:p-8">{children}</main>
         </div>
       </div>

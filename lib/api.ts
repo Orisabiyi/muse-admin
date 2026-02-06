@@ -5,8 +5,6 @@ import { ProductFormValues } from "./validations";
 
 const baseUrl = process.env.NEXT_PUBLIC_MUSE_BASE_URL
 
-
-
 const api = axios.create({
   baseURL: baseUrl,
 })

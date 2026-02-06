@@ -33,7 +33,6 @@ type SortField = 'name' | 'category' | 'price' | 'stock' | 'status';
 type SortOrder = 'asc' | 'desc';
 
 export default function ProductsPage() {
-  // View mode state
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
   // Pagination state
@@ -54,19 +53,14 @@ export default function ProductsPage() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Fetch all products (we'll filter client-side)
   const { data: products = [], isLoading, error } = useGetAllProducts(1, 100);
 
-  // Mutations
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct();
   const deleteMutation = useDeleteProduct();
 
-  // Client-side filtering and sorting
-  // Client-side filtering and sorting
   const filteredAndSortedProducts = useMemo(() => {
-    // First, filter products
-    const filtered = products.filter((product) => {  // ✅ Changed from 'let' to 'const'
+    const filtered = products.filter((product) => {
       const matchesSearch =
         searchQuery === '' ||
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -81,7 +75,6 @@ export default function ProductsPage() {
       return matchesSearch && matchesCategory && matchesStatus;
     });
 
-    // Then, sort products
     filtered.sort((a, b) => {
       let compareValue = 0;
 
@@ -419,7 +412,6 @@ export default function ProductsPage() {
         </>
       )}
 
-      {/* Product Form Modal */}
       <ProductForm
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
@@ -428,7 +420,6 @@ export default function ProductsPage() {
         isLoading={createMutation.isPending || updateMutation.isPending}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteDialog
         open={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
