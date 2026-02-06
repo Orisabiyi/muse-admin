@@ -31,7 +31,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onEdit, onDelete, onView }: ProductCardProps) {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg">
+    <Card className="overflow-hidden transition-all hover:shadow-lg mt-5 py-0 rounded-none">
       <div
         className="relative aspect-square w-full cursor-pointer overflow-hidden bg-muted"
         onClick={() => onView(product)}
