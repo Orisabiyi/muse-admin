@@ -301,8 +301,8 @@ export default function ProductsPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-              <div className="text-sm text-muted-foreground">
+            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row mt-5 w-full">
+              <div className="text-sm text-muted-foreground w-full">
                 Page {currentPage} of {totalPages} • Showing {startIndex + 1}-
                 {Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length}{' '}
                 products

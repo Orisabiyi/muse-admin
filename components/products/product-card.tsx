@@ -30,13 +30,13 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg">
+    <Card className="overflow-hidden transition-all hover:shadow-lg mt-5 rounded-none py-0">
       <div className="relative aspect-square w-full overflow-hidden bg-muted">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover transition-transform hover:scale-105"
+          className="object-cover transition-transform hover:scale-105 w-full h-full"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute right-2 top-2">
@@ -106,7 +106,7 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
       </CardContent>
 
       <CardFooter className="border-t p-4">
-        <Badge variant="outline" className="w-full justify-center">
+        <Badge variant="outline" className="w-full justify-center rounded-md">
           {product.category}
         </Badge>
       </CardFooter>
