@@ -1,6 +1,6 @@
 # 🎨 Muse Admin - Product Management Dashboard
 
-A modern, responsive product management dashboard built with Next.js 14, TypeScript, and shadcn/ui. Features a complete CRUD interface with advanced filtering, sorting, and real-time search capabilities.
+A modern, responsive product management dashboard built with Next.js, TypeScript, and shadcn/ui. Features a complete CRUD interface with advanced filtering, sorting, and real-time search capabilities.
 
 ![Muse Admin Dashboard](./public/screenshots/dashboard.png)
 
@@ -22,7 +22,7 @@ A modern, responsive product management dashboard built with Next.js 14, TypeScr
 
 ### Core Framework
 
-- **Next.js 14** - React framework with App Router
+- **Next.js** - React framework with App Router
 - **TypeScript** - Type-safe development
 - **React 18** - UI library
 
@@ -233,9 +233,9 @@ muse-admin/
 
 ### Architecture Choices
 
-#### 1. **Next.js 14 with App Router**
+#### 1. **Next.js with App Router**
 
-**Why:** Chose Next.js 14's App Router for its cutting-edge features including React Server Components, improved routing system, and built-in performance optimizations.
+**Why:** Chose Next.js App Router for its cutting-edge features including React Server Components, improved routing system, and built-in performance optimizations.
 
 **Benefits:**
 
