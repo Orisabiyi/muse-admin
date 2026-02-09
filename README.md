@@ -192,43 +192,41 @@ npm start
 ```
 muse-admin/
 ├── app/
-│   ├── layout.tsx              # Root layout with providers
-│   ├── page.tsx                # Main products page
-│   └── globals.css             # Global styles
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
 │
 ├── components/
-│   ├── ui/                     # shadcn/ui components
+│   ├── ui/
 │   ├── dashboard/
-│   │   └── dashboard-layout.tsx    # Sidebar & header layout
+│   │   └── dashboard-layout.tsx
 │   ├── products/
-│   │   ├── product-table.tsx       # Table view with sorting
-│   │   ├── product-card.tsx        # Grid card component
-│   │   ├── product-form.tsx        # Create/edit form modal
-│   │   ├── product-details-dialog.tsx  # View details modal
-│   │   ├── delete-dialog.tsx       # Delete confirmation
-│   │   └── search-filter.tsx       # Search & filter bar
-│   └── providers.tsx           # React Query provider
+│   │   ├── product-table.tsx
+│   │   ├── product-card.tsx
+│   │   ├── product-form.tsx
+│   │   ├── product-details-dialog.tsx
+│   │   ├── delete-dialog.tsx
+│   │   └── search-filter.tsx
+│   └── providers.tsx
 │
 ├── hooks/
-│   └── useProducts.ts          # React Query hooks for CRUD
+│   └── useProducts.ts
 │
 ├── lib/
-│   ├── api.ts                  # API service layer
-│   ├── validations.ts          # Zod schemas
-│   └── utils.ts                # Utility functions
+│   ├── api.ts
+│   ├── validations.ts
+│   └── utils.ts
 │
 ├── types/
-│   └── product.ts              # TypeScript interfaces
+│   └── product.ts
 │
 ├── public/
-│   └── screenshots/            # Application screenshots
+│   └── screenshots/
 │
-├── .env.local                  # Environment variables (gitignored)
-├── .env.example                # Example environment variables
-├── next.config.js              # Next.js configuration
-├── tailwind.config.ts          # Tailwind configuration
-├── tsconfig.json               # TypeScript configuration
-└── package.json                # Dependencies and scripts
+├── .env.local
+├── next.config.js
+├── tsconfig.json
+└── package.json
 ```
 
 ## 🎯 Technical Decisions
@@ -571,7 +569,7 @@ Next.js automatically splits code per route, reducing initial bundle size.
 
 **mockapi.io Configuration:**
 
-- 100 products generated with Faker.js
+- 50 products generated with Faker.js
 - Categories: Electronics, Clothing, Books, Home, Sports
 - Price range: $10-$1000
 - Stock range: 0-100 units
@@ -600,29 +598,6 @@ pnpm run build        # Build optimized production bundle
 pnpm start            # Start production server
 pnpm run lint         # Run ESLint for code quality checks
 ```
-
-## 🔮 Future Enhancements
-
-### High Priority
-
-- [ ] **Server-side pagination** - For datasets with 10,000+ products
-- [ ] **Bulk operations** - Multi-select with bulk edit/delete
-- [ ] **Export functionality** - Export products to CSV/Excel
-- [ ] **Image upload** - Replace URLs with actual file uploads
-
-### Medium Priority
-
-- [ ] **Product categories management** - CRUD for categories
-- [ ] **Advanced filters** - Price range slider, date ranges
-- [ ] **Product variants** - Size, color options
-- [ ] **Inventory alerts** - Low stock notifications
-
-### Nice to Have
-
-- [ ] **Dark mode** - Theme toggle with system preference detection
-- [ ] **Analytics dashboard** - Sales trends, popular products
-- [ ] **Print functionality** - Print-friendly product reports
-- [ ] **Internationalization** - Multi-language support
 
 ## 🐛 Known Issues
 
